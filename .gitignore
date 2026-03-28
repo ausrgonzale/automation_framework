@@ -1,0 +1,63 @@
+# .gitignore
+
+# Virtual environment
+
+.venv/
+
+# Environment variables
+
+.env
+
+# Python cache
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+
+build/
+dist/
+*.egg-info/
+
+# Test artifacts
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE files
+
+.vscode/
+.idea/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Logs
+
+*.log
+
+# Temporary files
+
+*.tmp
+*.temp
+
+# Jupyter notebooks checkpoints
+
+.ipynb_checkpoints/
+
+# Coverage reports
+
+coverage.xml
+
+# Local configuration
+
+local_settings.py
+
+# Logs
+logs/
+*.log
