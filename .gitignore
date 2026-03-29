@@ -27,6 +27,13 @@ dist/
 .coverage
 htmlcov/
 
+# Test output files
+
+test.txt
+output.txt
+logs/
+*.out
+
 # IDE files
 
 .vscode/

@@ -6,7 +6,8 @@ from tools.tool_registry import tool_registry
 from tools import file_tools
 from tools import directory_tools
 from tools import write_file_tools
-
+from tools import search_text_tools
+from tools import append_file_tools
 
 # Configure logging once at startup
 configure_logging()
@@ -121,12 +122,11 @@ def run_agent() -> None:
 
         tool_name = parts[0]
 
-        if tool_name == "write_file":
+        if tool_name in ("write_file", "append_file"):
 
             if len(parts) < 3:
-
                 print(
-                    "Usage: write_file <path> <content>"
+                    f"Usage: {tool_name} <path> <content>"
                 )
                 continue
 
@@ -135,10 +135,22 @@ def run_agent() -> None:
                 "content": " ".join(parts[2:])
             }
 
+        elif tool_name == "search_text":
+
+            if len(parts) < 3:
+                print(
+                    "Usage: search_text <path> <pattern>"
+                )
+                continue
+
+            arguments = {
+                "path": parts[1],
+                "pattern": " ".join(parts[2:])
+            }
+
         else:
 
             if len(parts) < 2:
-
                 print(
                     f"Usage: {tool_name} <path>"
                 )

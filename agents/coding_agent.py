@@ -1,5 +1,7 @@
 import anthropic
 import os
+import time
+import logging
 from dotenv import load_dotenv
 
 from anthropic.types import ToolUseBlock
@@ -11,6 +13,8 @@ from config.anthropic_client import get_anthropic_client
 
 load_dotenv()
 
+logger = logging.getLogger(__name__)
+
 api_key = os.getenv("ANTHROPIC_API_KEY")
 
 if not api_key:
@@ -18,11 +22,35 @@ if not api_key:
 
 client = get_anthropic_client()
 
+# ── Token management ──────────────────────────────────────────────────────────
+
+MAX_FILE_CHARS = 4000  # ~1000 tokens — keeps file reads from blowing up context
+
+def truncate_tool_result(content: str) -> str:
+    if len(content) > MAX_FILE_CHARS:
+        return content[:MAX_FILE_CHARS] + "\n... [truncated for context length]"
+    return content
+
+# ── Rate-limit aware API call ─────────────────────────────────────────────────
+
+def call_with_retry(client: anthropic.Anthropic, **kwargs: Any):
+    for attempt in range(3):
+        try:
+            return client.messages.create(**kwargs)
+        except anthropic.RateLimitError:
+            wait = 60 * (attempt + 1)  # 60s, 120s, 180s
+            logger.warning("Rate limited, waiting %ss before retry (attempt %s/3)", wait, attempt + 1)
+            print(f"\n[Rate limited] Waiting {wait}s before retry...")
+            time.sleep(wait)
+    raise RuntimeError("Exceeded retry attempts due to rate limiting")
+
+# ── Pydantic models ───────────────────────────────────────────────────────────
+
 class ReadArgs(BaseModel):
     """ Read a file from the filesystem. """
     path: str
 
-def execute_read(args: ReadArgs)-> str:
+def execute_read(args: ReadArgs) -> str:
     try:
         return Path(args.path).read_text()
     except Exception as e:
@@ -66,24 +94,23 @@ def execute_edit(args: EditArgs) -> str:
 def execute_bash(args: BashArgs) -> str:
     try:
         import subprocess
-        result = subprocess.run(args.command, shell=False, capture_output=True, text=True) # type: ignore
+        result = subprocess.run(args.command, shell=False, capture_output=True, text=True)  # type: ignore
         return result.stdout + result.stderr
     except Exception as e:
         return f"Error: {e}"
 
-# Tool definition Clause user to know the tools exists
+# ── Tool definitions ──────────────────────────────────────────────────────────
 
 tools: list[dict[str, Any]] = [
     {"name": "read", "description": "Read a file from the filesystem.", "input_schema": ReadArgs.model_json_schema()},
     {"name": "write",
     "description": "Write content to a file on the filesystem. Both path and content are required — you must have the full file content ready before calling this tool.",
-    "input_schema": WriteArgs.
-    model_json_schema()},
+    "input_schema": WriteArgs.model_json_schema()},
     {"name": "edit", "description": "Edit a file by replacing exact text with new text.", "input_schema": EditArgs.model_json_schema()},
     {"name": "bash", "description": "Execute a bash command and return the output.", "input_schema": BashArgs.model_json_schema()},
 ]
 
-# Send query with tools available
+# ── Agentic loop ──────────────────────────────────────────────────────────────
 
 messages: list[dict[str, Any]] = []
 
@@ -97,9 +124,10 @@ while True:
     messages.append({"role": "user", "content": query})
 
     while True:
-        response = client.messages.create(
+        response = call_with_retry(                  # ← swapped in here
+            client,
             model="claude-sonnet-4-5",
-            max_tokens=8192, # increase to all enough room to create the script.
+            max_tokens=8192,
             tools=tools,  # type: ignore
             messages=messages  # type: ignore
         )
@@ -131,7 +159,7 @@ while True:
             tool_results.append({
                 "type": "tool_result",
                 "tool_use_id": block.id,
-                "content": result
+                "content": truncate_tool_result(result)  # ← applied here
             })
 
         messages.append({"role": "assistant", "content": response.content})

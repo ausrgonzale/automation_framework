@@ -1,5 +1,6 @@
 import os
 import logging
+import httpx
 import anthropic
 from dotenv import load_dotenv
 
@@ -27,13 +28,22 @@ def get_anthropic_client() -> anthropic.Anthropic:
             "ANTHROPIC_API_KEY not found in environment variables"
         )
 
-    timeout = int(os.getenv("ANTHROPIC_TIMEOUT", "30"))
+    read_timeout = int(os.getenv("ANTHROPIC_READ_TIMEOUT", "600"))
+    connect_timeout = int(os.getenv("ANTHROPIC_CONNECT_TIMEOUT", "10"))
     max_retries = int(os.getenv("ANTHROPIC_MAX_RETRIES", "3"))
+
+    timeout = httpx.Timeout(
+        connect=connect_timeout,  # time to establish connection
+        read=read_timeout,        # time to wait for model response — the one expiring
+        write=10.0,
+        pool=10.0,
+    )
 
     logger.info("Initializing Anthropic client")
     logger.debug(
-        "Anthropic configuration: timeout=%s, retries=%s",
-        timeout,
+        "Anthropic configuration: read_timeout=%s, connect_timeout=%s, retries=%s",
+        read_timeout,
+        connect_timeout,
         max_retries,
     )
 

@@ -1,0 +1,22 @@
+# E2E Test Dependencies
+# Install with: pip install -r tests/e2e/requirements.txt
+
+# Core testing framework
+pytest>=7.4.0
+
+# Playwright for browser automation
+playwright>=1.40.0
+pytest-playwright>=0.4.3
+
+# Optional but recommended
+pytest-html>=3.2.0          # HTML test reports
+pytest-xdist>=3.3.0         # Parallel test execution
+pytest-timeout>=2.1.0       # Test timeout management
+pytest-cov>=4.1.0          # Code coverage reports
+
+# Additional helpers
+pytest-json-report>=1.5.0   # JSON test reports
+pytest-metadata>=3.0.0      # Test metadata
+
+# After installing, run:
+# playwright install chromium
