@@ -1,220 +1,119 @@
-# Automation Platform
+Automation Framework
 
-## Overview
+This project is a portable, modular test automation framework designed to support scalable UI and API testing across multiple applications.
 
-The **Automation Platform** is a Python-based framework designed to support automated software testing, utilities, and AI-assisted development workflows. It provides a modular architecture for building reusable automation components such as agents, utilities, test runners, and integrations.
+The framework is intentionally application-agnostic and built using industry-standard tools, including:
 
-This repository currently includes:
+Playwright for browser automation
+pytest for test orchestration
+Python for extensibility and maintainability
 
-* An AI-powered coding agent
-* File system utilities
-* Excel CRUD automation utilities
-* Tool-based command execution framework
-* Environment-based configuration management
-* Scalable project structure for future automation features
+It follows modern test architecture principles focused on reliability, determinism, and long-term maintainability.
 
-The platform is being developed as part of a professional automation engineering portfolio and is designed to evolve into a production-ready automation framework.
+The framework is designed to evolve into a full automation platform supporting:
 
----
+UI automation
+API automation
+Parallel test execution
+Containerized test environments
+CI/CD integration
+Multi-application test support
+Project Goals
 
-## Project Structure
+The primary objective of this framework is to provide a reusable automation foundation that:
 
-```
-automation/
-│
-├── coding_agent/
-│   ├── agent.py
-│   └── __init__.py
-│
-├── utilities/
-│   ├── excel_crud.py
-│   └── __init__.py
-│
-├── tests/
-│   └── test_excel_crud.py
-│
-├── documentation/
-│
-├── .env
-├── .gitignore
-├── requirements.txt
-└── README.md
-```
+Supports multiple applications without code coupling
+Enforces deterministic test behavior
+Maintains clean separation between framework and application
+Scales from local development to production CI pipelines
+Enables reliable regression testing
+Architecture Principles
 
----
+The framework follows strict architectural rules to ensure stability and portability:
 
-## Features
+Single root conftest.py
+Application-independent test logic
+UI and API interaction only (no direct database access)
+Unique test data generation
+Deterministic execution
+Feature-based test organization
+Reusable fixtures
+Clear separation between framework and application
+Current Capabilities
 
-Current capabilities:
+The framework currently supports full end-to-end workflow automation for a Django-based sample application.
 
-* AI coding agent with tool execution
-* File read/write/edit utilities
-* Bash command execution
-* Excel CRUD automation
-* Modular architecture for reusable automation components
-* Environment-based secret management
-* Ready for CI/CD integration
+Implemented workflows include:
 
-Planned enhancements:
+User authentication
+User registration
+Topic management
+Topic entry management
+Access control validation
+Form validation handling
 
-* Test execution orchestration
-* Logging and monitoring
-* Configuration management
-* Plugin-style tool registration
-* CI pipeline integration
-* Automated reporting
-* Test data management utilities
+Example workflow coverage:
 
----
+Create
+Edit
+Delete
+Authentication enforcement
+Validation behavior
 
-## Requirements
+Project Structure
+automation-framework/
 
-Python:
+tests/
 
-```
-Python 3.12+
-```
+    unit/
+    e2e/
 
-Dependencies:
+        test_login.py
+        test_user_registration.py
+        test_topics.py
+        test_topic_entries.py
 
-```
-anthropic
-pydantic
-python-dotenv
-openpyxl
-pandas
+conftest.py
+
+documentation/
+
+    architecture.md
+    design.md
+    implementation_plan.md
+Technology Stack
+Python
+Playwright
 pytest
-```
+pytest-playwright
 
-Install dependencies:
+Planned:
 
-```
-pip install -r requirements.txt
-```
+Docker
+pytest-xdist
+REST API automation
+GitHub Actions CI/CD
+Design Philosophy
 
----
+This framework emphasizes:
 
-## Environment Configuration
+Reliability over speed
+Consistency over shortcuts
+Determinism over randomness
+Architecture over scripts
+Versioning
 
-Create a `.env` file in the project root:
+The project follows semantic versioning:
 
-```
-ANTHROPIC_API_KEY=your_api_key_here
-```
+v0.1.0 — Framework initialization
+v0.2.0 — Core authentication workflows
+v0.3.0 — Topic and entry CRUD workflows
+Future Enhancements
 
-The application loads environment variables using:
+Planned capabilities include:
 
-```
-python-dotenv
-```
-
-Important:
-
-```
-The .env file must never be committed to version control.
-```
-
----
-
-## Running the Coding Agent
-
-Activate the virtual environment:
-
-```
-source .venv/bin/activate
-```
-
-Run the agent:
-
-```
-python coding_agent/agent.py
-```
-
-Exit the agent:
-
-```
-exit
-```
-
-or
-
-```
-quit
-```
-
----
-
-## Development Workflow
-
-Standard workflow:
-
-```
-Activate virtual environment
-Make code changes
-Run tests
-Commit changes
-Push to repository
-```
-
-Example:
-
-```
-pytest
-git add .
-git commit -m "Add new utility function"
-git push
-```
-
----
-
-## Testing
-
-Run the test suite:
-
-```
-pytest
-```
-
-Future enhancements:
-
-* Unit tests
-* Integration tests
-* Utility validation tests
-* Agent behavior tests
-
----
-
-## Security Notes
-
-Sensitive data must be stored in:
-
-```
-.env
-```
-
-Never commit:
-
-* API keys
-* Secrets
-* Tokens
-* Credentials
-
----
-
-## Future Roadmap
-
-Planned platform capabilities:
-
-* AI-driven test generation
-* Test execution orchestration
-* Reporting and analytics
-* Test data management
-* CI/CD automation
-* Plugin-based architecture
-* Multi-environment configuration
-
----
-
-## License
-
-This project is intended for educational and professional portfolio use.
+API-level test automation
+Parallel execution
+Containerized test environments
+CI/CD pipeline integration
+Test reporting and metrics
+Multi-application support
