@@ -28,7 +28,6 @@ def context_page(page: Page):
     """Fixture to provide a fresh page for each test."""
     page.goto(BASE_URL)
     yield page
-    page.screenshot(path="register_page_error.png")
 
 
 @pytest.mark.registration
@@ -38,7 +37,6 @@ def test_registration_page_accessibility(context_page: Page):
     Ensure that users can navigate to the registration page from home.
     """
     page = context_page
-    page.screenshot(path="register_debug.png")
     
     # Verify home page loads
     expect(page).to_have_url(BASE_URL + "/")
