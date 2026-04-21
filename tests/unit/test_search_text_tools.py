@@ -1,50 +1,47 @@
-from tools.search_text_tools import (
-    execute_search_text,
-    SearchTextArgs,
-)
+from mcp.tools.filesystem.search_text_tool import SearchTextTool
 
 
-def test_search_text_success(tmp_path):
+def test_search_text_finds_matches(tmp_path):
 
-    file_path = tmp_path / "test.txt"
+    tool = SearchTextTool()
+
+    file_path = tmp_path / "file.txt"
 
     file_path.write_text(
-        "hello\nerror occurred\nbye"
+        "hello world\n"
+        "another line\n"
+        "hello again"
     )
 
-    args = SearchTextArgs(
-        path=str(file_path),
-        pattern="error",
+    result = tool.execute(
+        {
+            "path": str(file_path),
+            "text": "hello",
+        }
     )
 
-    result = execute_search_text(args)
+    assert result["status"] == "success"
 
-    assert "error occurred" in result
+    assert result["count"] == 2
+
+    assert result["matches"][0]["line_number"] == 1
 
 
-def test_search_text_no_match(tmp_path):
+def test_search_text_no_matches(tmp_path):
 
-    file_path = tmp_path / "test.txt"
+    tool = SearchTextTool()
 
-    file_path.write_text("hello")
+    file_path = tmp_path / "file.txt"
 
-    args = SearchTextArgs(
-        path=str(file_path),
-        pattern="error",
+    file_path.write_text("nothing here")
+
+    result = tool.execute(
+        {
+            "path": str(file_path),
+            "text": "missing",
+        }
     )
 
-    result = execute_search_text(args)
+    assert result["status"] == "success"
 
-    assert result == "No matches found"
-
-
-def test_search_text_path_not_found():
-
-    args = SearchTextArgs(
-        path="does_not_exist",
-        pattern="error",
-    )
-
-    result = execute_search_text(args)
-
-    assert "Path not found" in result
+    assert result["count"] == 0

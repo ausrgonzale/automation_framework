@@ -1,0 +1,96 @@
+# Consolidated Configuration
+# Single file configuration for platform-independent test automation framework
+
+framework:
+  name: "Test Automation Framework"
+  version: "1.0.0"
+  platform: "independent"
+
+execution:
+  default_runner: "pytest"
+  parallel_execution: true
+  max_workers: 4
+  timeout_seconds: 300
+
+ai:
+  default_provider: "ollama"
+  temperature: 0.1
+  max_tokens: 2000
+
+logging:
+  level: "INFO"
+  format: "json"
+  outputs: ["console", "file"]
+
+reporting:
+  formats: ["html", "junit", "allure"]
+  storage: "local"
+
+# Provider configurations
+providers:
+  ollama:
+    base_url: "http://localhost:11434"
+    model: "llama3.1:latest"
+    timeout: 300
+    max_retries: 2
+
+  openai:
+    api_key: "${OPENAI_API_KEY}"
+    model: "gpt-4o"
+    base_url: "https://api.openai.com/v1"
+    timeout: 60
+    max_retries: 3
+
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY}"
+    model: "claude-3-5-sonnet-latest"
+    base_url: "https://api.anthropic.com"
+    timeout: 60
+    max_retries: 3
+
+  jira:
+    url: "https://company.atlassian.net"
+    username: "${JIRA_USERNAME}"
+    api_token: "${JIRA_API_TOKEN}"
+    project_key: "PROJ"
+
+  excel:
+    default_format: "xlsx"
+    templates:
+      test_cases: "templates/test_case_template.xlsx"
+    output_dir: "output/excel"
+
+  testrail:
+    url: "https://company.testrail.com"
+    username: "${TESTRAIL_USERNAME}"
+    api_key: "${TESTRAIL_API_KEY}"
+    project_id: 1
+
+# Environment overrides
+environments:
+  local:
+    execution:
+      parallel_execution: false
+      max_workers: 1
+    ai:
+      temperature: 0.2
+    logging:
+      level: "DEBUG"
+
+  ci:
+    execution:
+      parallel_execution: true
+      max_workers: 4
+    ai:
+      default_provider: "openai"
+      temperature: 0.0
+    logging:
+      level: "INFO"
+
+# Project-specific settings
+projects:
+  default:
+    test_strategy:
+      types: ["functional", "regression", "api", "ui"]
+    input_sources: ["file"]  # file, jira, excel
+    output_formats: ["pytest"]  # pytest, excel, testrail

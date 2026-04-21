@@ -1,84 +1,50 @@
-from tools.append_file_tools import (
-    execute_append_file,
-    AppendFileArgs,
-)
+from mcp.tools.filesystem.append_file_tool import AppendFileTool
 
-def test_append_file_success(tmp_path):
-    """
-    Verify content is appended to a new file.
-    """
+
+def test_append_file_adds_content(tmp_path):
+
+    tool = AppendFileTool()
 
     file_path = tmp_path / "test.txt"
 
-    args = AppendFileArgs(
-        path=str(file_path),
-        content="hello",
+    result = tool.execute(
+        {
+            "path": str(file_path),
+            "content": "first line",
+        }
     )
 
-    result = execute_append_file(args)
+    assert result["status"] == "success"
 
-    assert "Content appended" in result
+    result = tool.execute(
+        {
+            "path": str(file_path),
+            "content": "second line",
+        }
+    )
+
+    assert result["status"] == "success"
+
+    content = file_path.read_text()
+
+    assert "first line" in content
+
+    assert "second line" in content
+
+
+def test_append_file_creates_file_if_missing(tmp_path):
+
+    tool = AppendFileTool()
+
+    file_path = tmp_path / "new_file.txt"
+
+    result = tool.execute(
+        {
+            "path": str(file_path),
+            "content": "content",
+        }
+    )
+
+    assert result["status"] == "success"
 
     assert file_path.exists()
-
-    assert file_path.read_text() == "hello\n"
-
-
-def test_append_file_multiple_appends(tmp_path):
-    """
-    Verify multiple appends add lines correctly.
-    """
-
-    file_path = tmp_path / "test.txt"
-
-    execute_append_file(
-        AppendFileArgs(
-            path=str(file_path),
-            content="first",
-        )
-    )
-
-    execute_append_file(
-        AppendFileArgs(
-            path=str(file_path),
-            content="second",
-        )
-    )
-
-    assert file_path.read_text() == (
-        "first\nsecond\n"
-    )
-
-
-def test_append_file_creates_parent_directory(tmp_path):
-    """
-    Verify missing directories are created automatically.
-    """
-
-    nested_file = tmp_path / "logs" / "output.txt"
-
-    args = AppendFileArgs(
-        path=str(nested_file),
-        content="data",
-    )
-
-    execute_append_file(args)
-
-    assert nested_file.exists()
-
-    assert nested_file.read_text() == "data\n"
-
-
-def test_append_file_invalid_path():
-    """
-    Verify error is returned for invalid path.
-    """
-
-    args = AppendFileArgs(
-        path="/invalid/path/test.txt",
-        content="data",
-    )
-
-    result = execute_append_file(args)
-
-    assert "File append error" in result

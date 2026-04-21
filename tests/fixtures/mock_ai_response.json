@@ -1,0 +1,14 @@
+{
+      "testcases": [
+            {
+                  "title": "User logs in successfully",
+                  "description": "Verify valid credentials allow login",
+                  "steps": [
+                        "Navigate to login page",
+                        "Enter valid username and password",
+                        "Click login"
+                  ],
+                  "expected_result": "User is redirected to dashboard"
+            }
+      ]
+}

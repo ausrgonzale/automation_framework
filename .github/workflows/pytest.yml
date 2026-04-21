@@ -1,0 +1,51 @@
+name: Run Pytest
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    env:
+      # AI Configuration
+      AI_PROVIDER: openai  # Use OpenAI in CI instead of Ollama
+      AI_MODEL: gpt-4o
+      AI_RETRIES: 3
+      AI_RETRY_DELAY: 1
+      AI_RETRY_BACKOFF: 2
+
+      # API Keys (from GitHub Secrets)
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      SEARCH_API_KEY: ${{ secrets.SEARCH_API_KEY }}
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Install Playwright browsers
+      run: |
+        playwright install --with-deps
+
+    - name: Run tests
+      run: |
+        pytest -v

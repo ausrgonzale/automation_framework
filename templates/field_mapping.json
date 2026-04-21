@@ -1,0 +1,22 @@
+{
+  "Excel": {
+    "Story ID": "Test ID",
+    "Summary": "Title",
+    "Description": "Steps",
+    "Acceptance Criteria": "Expected Results",
+    "Related": "Related To",
+    "Priority": "Priority",
+    "Language": "Language",
+    "Tool": "Framework"
+  },
+  "Jira": {
+    "key": "Test ID",
+    "summary": "Title",
+    "description": "Steps",
+    "acceptance_criteria": "Expected Results",
+    "related_to": "Related To",
+    "priority": "Priority",
+    "language": "Language",  
+    "tool": "Framework"      
+  }
+}

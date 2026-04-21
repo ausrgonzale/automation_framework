@@ -1,53 +1,67 @@
-# E2E Test Suite - Summary
+# Test Suite Structure - Summary
 
-## What Was Created
+## Update: E2E Tests Relocation
 
-This document provides a complete overview of the E2E test infrastructure created for testing user registration in your Django application.
+**Important**: The E2E test suite has been moved to the separate [pcc-learning-log](https://github.com/username/pcc-learning-log) project. This automation framework repository now focuses on the core testing infrastructure and AI-powered test generation capabilities.
 
-## Directory Structure
+## Current Test Structure
 
+This repository contains:
+
+### Unit Tests (`tests/unit/`)
+- Framework component testing
+- AI provider integration tests
+- Utility function tests
+- Service layer tests
+
+### Integration Tests (`tests/integration/`)
+- AI client integration
+- Service orchestration tests
+- End-to-end service workflows
+
+### E2E Tests
+- **Moved to**: [pcc-learning-log](https://github.com/username/pcc-learning-log) project
+- Contains application-specific end-to-end test scenarios
+- Demonstrates framework usage with real Django application
+
+## Framework Capabilities
+
+The core framework provides:
+- AI-powered unit test generation from source code
+- Modular provider architecture (Ollama, OpenAI, Anthropic)
+- Platform-independent configuration
+- CI/CD integration
+- Deterministic test execution
+
+## Test Execution
+
+### Unit & Integration Tests
+```bash
+# Run all framework tests
+pytest tests/
+
+# Run specific test types
+pytest -m unit tests/
+pytest -m integration tests/
 ```
-tests/
-├── __init__.py                           # Tests package init
-├── README.md                             # Main tests documentation
-│
-└── e2e/
-    ├── __init__.py                       # E2E package init
-    ├── conftest.py                       # E2E-specific fixtures
-    ├── test_user_registration.py         # ⭐ Main test file (14 test cases)
-    ├── run_tests.sh                      # Linux/Mac test runner script
-    ├── run_tests.bat                     # Windows test runner script
-    ├── README.md                         # Comprehensive E2E documentation
-    ├── QUICKSTART.md                     # Quick start guide
-    └── TEST_SUMMARY.md                   # This file
+
+### E2E Tests
+E2E tests are now executed in the [pcc-learning-log](https://github.com/username/pcc-learning-log) project:
+```bash
+# In pcc-learning-log repository
+pytest tests/e2e/
 ```
 
-## Files Updated
+---
 
-### `pytest.ini` (root directory)
-**Updated** with enhanced configuration:
-- Added new markers: `e2e`, `unit`, `integration`, `smoke`
-- Added `tests` to test paths
-- Added `-ra` flag for summary of all test outcomes
-- Added `console_output_style = progress`
-- Added `minversion = 3.8`
+## Legacy E2E Documentation (Moved)
 
-**Previous e2e-specific configuration was merged** - no separate pytest.ini in e2e directory.
+The following documentation has been moved to the pcc-learning-log project:
 
-## Test Files Created
-
-### 1. `tests/e2e/test_user_registration.py` ⭐
-**Main test file** - 14 comprehensive test cases covering:
-
-#### Test Cases Included:
-
-| Test # | Function Name | Purpose |
-|--------|---------------|---------|
-| TC01 | `test_registration_page_accessibility` | Verify registration page loads and form exists |
-| TC02 | `test_successful_registration_new_user` | Test successful user registration |
-| TC03 | `test_registration_duplicate_username` | Verify duplicate username is rejected |
-| TC04 | `test_registration_password_mismatch` | Verify password confirmation must match |
-| TC05 | `test_registration_empty_username` | Verify username is required |
+- E2E test case specifications
+- Test execution scripts
+- Application-specific test scenarios
+- Django integration examples
 | TC06 | `test_registration_empty_password` | Verify password is required |
 | TC07 | `test_registration_weak_password_too_short` | Test minimum password length validation |
 | TC08 | `test_registration_password_too_similar_to_username` | Test password similarity validation |

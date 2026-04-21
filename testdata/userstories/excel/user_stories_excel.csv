@@ -1,0 +1,6 @@
+Story ID,Summary,Description,Acceptance Criteria,,,Relates,Priority,Language,Tool
+US-1,User login,As a user I want to log in so I can access my account,User can log in with valid credentials,,,,1,Python,Playwright
+US-2,Password reset,As a user I want to reset my password so I can regain access if I forget it,User receives reset email and can set a new password,,,US-1,,Python,Playwright
+US-3,Profile update,As a user I want to update my profile information,User can update name and email,,,"US-1,US-2",3,,Manual
+US-4,Account lockout,As a user I want my account to lock after 5 failed logins,Account locks after 5 failed attempts,,,US-1,,Python,Playwright
+US-5,Email verification,As a user I want to verify my email,User receives verification email and can activate account,,,US-2,,,Manual
