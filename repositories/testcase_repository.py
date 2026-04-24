@@ -46,8 +46,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, List
 
 
-class TestcaseRepository(ABC):
-        __test__ = False
+class CheckcaseRepository(ABC):
     """
     Abstract base class defining the persistence contract
     for test case storage.

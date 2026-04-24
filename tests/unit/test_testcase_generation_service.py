@@ -1,4 +1,4 @@
-from services.testcase_generation_service import TestcaseGenerationService
+from services.testcase_generation_service import CheckcaseGenerationService
 
 
 class DummyRepo:
@@ -8,7 +8,7 @@ class DummyRepo:
 
 def test_service_priority_field():
     repo = DummyRepo()
-    service = TestcaseGenerationService(repo)
+    service = CheckcaseGenerationService(repo)
     extra_fields = {
         "summary": "Priority Service",
         "description": "Service test",

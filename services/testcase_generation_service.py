@@ -23,8 +23,7 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 
 
-class TestcaseGenerationService:
-    __test__ = False
+class CheckcaseGenerationService:
     """
     Service responsible for generating and validating test cases.
     """

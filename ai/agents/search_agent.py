@@ -87,6 +87,8 @@ class SearchAgent:
                     print(f"Error: {e}")
             if tool and hasattr(tool, "execute"):
                 result = tool.execute(arguments)
+            elif hasattr(self.tool_registry, "execute"):
+                result = self.tool_registry.execute(tool_name, arguments)
             else:
                 result = {
                     "status": "error",

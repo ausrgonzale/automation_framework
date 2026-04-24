@@ -12,8 +12,7 @@ Architecture Role:
 from pydantic import BaseModel
 
 
-class TestcaseGenerationRequest(BaseModel):
-        __test__ = False
+class CheckcaseGenerationRequest(BaseModel):
     """
     Input contract for testcase generation.
     """

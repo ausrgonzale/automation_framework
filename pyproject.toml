@@ -1,0 +1,7 @@
+[tool.ruff]
+include = ["**/*.py", "**/*.pyi"]
+extend-include = ["*.md"]
+exclude = [
+    ".venv",
+    "__pycache__",
+]

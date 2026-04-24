@@ -12,9 +12,9 @@ def test_normalize_prompt_basic():
     result = normalize_prompt("Summarize this.")
     assert "prompt" in result
     assert "generation_params" in result
-    assert "Do not explain" in result["prompt"]
+    assert "No reasoning or commentary" in result["prompt"]
     assert result["generation_params"]["temperature"] == 0.0
-    assert result["generation_params"]["num_predict"] == 50
+    assert result["generation_params"]["num_predict"] == 80
 
 
 def test_normalize_prompt_inst_tags():
@@ -36,4 +36,4 @@ def test_normalize_prompt_output_format():
 
 def test_normalize_prompt_no_explanation_false():
     result = normalize_prompt("Summarize this.", no_explanation=False)
-    assert "Do not explain" not in result["prompt"]
+    assert "No reasoning or commentary" not in result["prompt"]

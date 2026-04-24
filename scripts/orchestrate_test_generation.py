@@ -14,7 +14,7 @@ import yaml
 
 from ai.utils.story_normalizer import StoryNormalizer
 from repositories.csv_repository import CsvRepository
-from services.testcase_generation_service import TestcaseGenerationService
+from services.testcase_generation_service import CheckcaseGenerationService
 
 
 def get_args() -> argparse.Namespace:
@@ -122,7 +122,7 @@ def main() -> None:
 
     # Initialize repository for CSV output
     repo = CsvRepository(output_path)
-    service = TestcaseGenerationService(repo)
+    service = CheckcaseGenerationService(repo)
 
     # Generate and save test cases for each story, passing user_story_id
     for idx, story in enumerate(normalized_stories):

@@ -5,7 +5,7 @@ from ai.agents.testcase_generation_agent import (
     generate_testcases,
 )
 from ai.schemas.testcase_generation_request import (
-    TestcaseGenerationRequest,
+    CheckcaseGenerationRequest,
 )
 
 
@@ -32,7 +32,7 @@ def test_generate_mock_testcase():
         mock_client.generate.return_value = mock_output_text
         mock_client_factory.return_value = mock_client
 
-        request = TestcaseGenerationRequest(
+        request = CheckcaseGenerationRequest(
             story_id="AUTH-1",
             summary="User login",
             description="User can log in",

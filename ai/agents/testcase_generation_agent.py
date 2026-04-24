@@ -43,50 +43,45 @@ Example Use Cases:
     - Run shell commands
     - Inspect project structure
 """
+
 import logging
 
 from ai.client_factory import get_ai_client
 from ai.prompts.testcase_generation import (
     build_testcase_generation_prompt,
 )
-from ai.schemas.testcase import TestCaseSet
+from ai.schemas.testcase import CheckCaseSet
 from ai.schemas.testcase_generation_request import (
-    TestcaseGenerationRequest,
+    CheckcaseGenerationRequest,
 )
 
 logger = logging.getLogger(__name__)
 
+
 def generate_testcases(
-    request: TestcaseGenerationRequest,
-) -> TestCaseSet:
-    
+    request: CheckcaseGenerationRequest,
+) -> CheckCaseSet:
     """
     Generate structured testcases from a validated request.
     """
-    
+
     logger.info(
         "Generating testcases",
-        extra={
-            "story_id": request.story_id
-        },
+        extra={"story_id": request.story_id},
     )
-    
+
     client = get_ai_client()
-    
-    prompt = build_testcase_generation_prompt(
-        jira_story=request.description
-    )
-    
+
+    prompt = build_testcase_generation_prompt(jira_story=request.description)
+
     response_text = client.generate(
         prompt=prompt,
         temperature=0.0,
         max_tokens=300,
     )
-    
+
     try:
-        testcases = TestCaseSet.model_validate_json(
-            response_text
-        )
+        testcases = CheckCaseSet.model_validate_json(response_text)
     except Exception:
         logger.error(
             "Failed to parse AI response",
@@ -94,13 +89,13 @@ def generate_testcases(
                 "story_id": request.story_id,
                 "response": response_text,
             },
-            exc_info=True
+            exc_info=True,
         )
-        
+
         raise
     logger.info(
         "Generated %s testcases",
         len(testcases.testcases),
     )
-    
+
     return testcases

@@ -1,6 +1,6 @@
 import json
 
-from ai.schemas.testcase import TestCaseSet
+from ai.schemas.testcase import CheckCaseSet
 
 
 def build_testcase_generation_prompt(
@@ -14,7 +14,7 @@ def build_testcase_generation_prompt(
     """
 
     schema_json = json.dumps(
-        TestCaseSet.model_json_schema(),
+        CheckCaseSet.model_json_schema(),
         indent=2,
     )
 

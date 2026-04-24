@@ -181,8 +181,6 @@ class RedisQueueManager:
         except Exception:
             return None
 
-        return None
-
     # -------------------------------------------------------------------------
 
     def set_status(self, job_id: str, status: str) -> None:

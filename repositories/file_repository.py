@@ -63,28 +63,23 @@ Design Principles:
 
 import json
 import logging
-from typing import Any, Dict, List
 from pathlib import Path
+from typing import Any, Dict, List
 
-from repositories.testcase_repository import TestcaseRepository
-
-from mcp.tools.filesystem.write_file_tool import WriteFileTool
-from mcp.tools.filesystem.read_file_tool import ReadFileTool
 from mcp.tools.filesystem.file_exists_tool import FileExistsTool
-
+from mcp.tools.filesystem.read_file_tool import ReadFileTool
+from mcp.tools.filesystem.write_file_tool import WriteFileTool
+from repositories.testcase_repository import CheckcaseRepository
 
 logger = logging.getLogger(__name__)
 
 
-class FileRepository(TestcaseRepository):
+class FileRepository(CheckcaseRepository):
     """
     Filesystem-based implementation of the TestcaseRepository.
     """
 
-    def __init__(
-        self,
-        storage_directory: str = "storage"
-    ):
+    def __init__(self, storage_directory: str = "storage"):
         """
         Initialize repository.
 
@@ -98,10 +93,7 @@ class FileRepository(TestcaseRepository):
 
         # Ensure directory exists
 
-        self.storage_directory.mkdir(
-            parents=True,
-            exist_ok=True
-        )
+        self.storage_directory.mkdir(parents=True, exist_ok=True)
 
         # MCP tools
 
@@ -122,10 +114,7 @@ class FileRepository(TestcaseRepository):
 
     # ---------------------------------------------------------------------
 
-    def save(
-        self,
-        testcases: List[Dict[str, Any]]
-    ) -> None:
+    def save(self, testcases: List[Dict[str, Any]]) -> None:
         """
         Persist test cases to disk.
         """
@@ -133,10 +122,7 @@ class FileRepository(TestcaseRepository):
         if not testcases:
             raise ValueError("testcases list cannot be empty")
 
-        identifier = testcases[0].get(
-            "identifier",
-            "testcases"
-        )
+        identifier = testcases[0].get("identifier", "testcases")
 
         path = self._build_path(identifier)
 
@@ -148,10 +134,7 @@ class FileRepository(TestcaseRepository):
             },
         )
 
-        payload = json.dumps(
-            testcases,
-            indent=2
-        )
+        payload = json.dumps(testcases, indent=2)
 
         self.write_tool.execute(
             arguments={
@@ -162,10 +145,7 @@ class FileRepository(TestcaseRepository):
 
     # ---------------------------------------------------------------------
 
-    def load(
-        self,
-        identifier: str
-    ) -> List[Dict[str, Any]]:
+    def load(self, identifier: str) -> List[Dict[str, Any]]:
         """
         Retrieve stored test cases.
         """
@@ -192,10 +172,7 @@ class FileRepository(TestcaseRepository):
 
     # ---------------------------------------------------------------------
 
-    def exists(
-        self,
-        identifier: str
-    ) -> bool:
+    def exists(self, identifier: str) -> bool:
         """
         Determine whether stored test cases exist.
         """
@@ -226,7 +203,4 @@ class FileRepository(TestcaseRepository):
 
         files = self.storage_directory.glob("*.json")
 
-        return [
-            file.stem
-            for file in files
-        ]
+        return [file.stem for file in files]
