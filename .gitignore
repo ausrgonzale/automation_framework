@@ -70,23 +70,9 @@ logs/
 *.log
 
 # ================================
-# Private Architecture Documents
+# Private Architecture / Design Docs
 # ================================
-
-# Architecture / design folders
-docs/architecture/
-docs/design/
-docs/system_design/
-
-# Architecture / design files
-docs/*architecture*
-docs/*design*
-docs/*diagram*
-
-# Diagram formats
-*.drawio
-*.plantuml
-*.mmd
+docs/
 
 # ================================
 # Local / Private Notes
