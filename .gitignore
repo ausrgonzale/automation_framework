@@ -68,3 +68,37 @@ local_settings.py
 # Logs
 logs/
 *.log
+
+# ================================
+# Private Architecture Documents
+# ================================
+
+# Architecture / design folders
+docs/architecture/
+docs/design/
+docs/system_design/
+
+# Architecture / design files
+docs/*architecture*
+docs/*design*
+docs/*diagram*
+
+# Diagram formats
+*.drawio
+*.plantuml
+*.mmd
+
+# ================================
+# Local / Private Notes
+# ================================
+
+private/
+internal/
+notes/
+
+# ================================
+# Generated Test Data / Artifacts
+# ================================
+
+testdata/**/exceltmp/
+generated_testcases_*.csv
